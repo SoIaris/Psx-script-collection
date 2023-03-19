@@ -51,7 +51,7 @@ while _G.StartFarming do task.wait() --# Start farming if enabled
 
 	--# Autofarm
 	local nearest
-	local NearestOne;
+	local NearestOne = 99999
 	
 	for i,v in pairs(game:GetService("Workspace")["__THINGS"].Coins:GetChildren()) do 
 		if (v.POS.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < NearestOne then
