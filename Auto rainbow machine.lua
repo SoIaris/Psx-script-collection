@@ -14,7 +14,7 @@ local ConvertToRainbow = {} --# Do not edit!
 while _G.Start do task.wait(1)
 	for i,v in pairs(PetSave) do 
 		local pet = library.Directory.Pets[v.id]
-		if v.g and pet.name == "Clover Fairy" then --# g = golden
+		if v.g and pet.name == "Clover Fairy" then --# g = golden (Change "Clover Fairy" to the pet you want)
 			table.insert(ConvertToRainbow, v.uid)
 		end
 	end
