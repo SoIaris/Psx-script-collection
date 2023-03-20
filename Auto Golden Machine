@@ -1,25 +1,21 @@
 
 --[[
     By: Cylix#2977
-    About: Auto golden machine, auto use the golden machine
+    About: Auto rainbow machine, auto use the rainbow machine
 ]]
 
-_G.Start = false --# Auto use golden machine
 
 local Network = require(game:GetService("ReplicatedStorage").Library.Client.Network); local Fire, Invoke = Network.Fire, Network.Invoke; hookfunction(getupvalue(Fire, 1), function(...) return true end)
 local library = require(game.ReplicatedStorage.Framework.Library)
 local PetSave = library.Save.Get().Pets
 local ConvertToGolden = {} --# Do not edit!
 
-while _G.Start do task.wait(1)
-	for i,v in pairs(PetSave) do 
-		local pet = library.Directory.Pets[v.id]
-		if pet.name == "Cat" then --# Change "Cat" to the pet you want
-			table.insert(ConvertToGolden, v.uid)
-		end
+for i,v in pairs(PetSave) do 
+local pet = library.Directory.Pets[v.id]
+	if pet.name == "Clover Fairy" then --# Change "Clover Fairy" to the pet you want
+		table.insert(ConvertToGolden, v.uid)
 	end
-
-	local Convert = {[1] = {[1] = ConvertToGolden[1],[2] = ConvertToGolden[2],[3] = ConvertToGolden[3],[4] = ConvertToGolden[4],[5] = ConvertToGolden[5],[6] = ConvertToGolden[6]}}
-
-	Invoke("Use Golden Machine", unpack(Convert))
 end
+
+local Convert = {[1] = {[1] = ConvertToGolden[1],[2] = ConvertToGolden[2],[3] = ConvertToGolden[3],[4] = ConvertToGolden[4],[5] = ConvertToGolden[5],[6] = ConvertToGolden[6]}}
+Invoke("Use Golden Machine", unpack(Convert))
