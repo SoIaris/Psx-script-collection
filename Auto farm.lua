@@ -6,8 +6,10 @@
 _G.StartFarming = false
 
 _G.FarmSettings = {
-	["AutoOrbs"] = false, --# Auto claim orbs
-	["AutoLootBags"] = false --# Auto claim lootbags
+	["AutoOrbs"] = true, --# Auto claim orbs
+	["AutoLootBags"] = true, --# Auto claim lootbags
+	["MultiTarget"] = true, --# Put pets on multiable coins
+	["Ignore"] = {"Coins"} --# Chests to skip
 }
 
 --# Autofarm source
@@ -25,7 +27,7 @@ end
 function GetEquippedPets()
 	local EquippedPets = {}
 	for i,v in pairs(PetCmds.GetEquipped()) do
-	   table.insert(EquippedPets, v.uid) 
+		table.insert(EquippedPets, v.uid) 
 	end    
 	return EquippedPets
 end
@@ -33,37 +35,49 @@ end
 function ClaimOrbs()
 	local Orbs = {[1]={}}
 	for i,v in pairs(game.workspace['__THINGS'].Orbs:GetChildren()) do 
-	   Orbs[1][i] = v.Name 
+		Orbs[1][i] = v.Name 
 	end
 	Fire("Claim Orbs", unpack(Orbs))
 end
 
-while _G.StartFarming do task.wait() --# Start farming if enabled
-    local lp = game:GetService("Players").LocalPlayer
-    if _G.FarmSettings.AutoOrbs == true then
-        ClaimOrbs()
-    end
-    if _G.FarmSettings.AutoLootBags == true then
-    for _,Bag in pairs(game:GetService("Workspace")["__THINGS"].Lootbags:GetChildren()) do
-		  Bag.CFrame = CFrame.new(lp.Character.HumanoidRootPart.Position)
-	   end
-    end
 
-	--# Autofarm
-	local nearest
-	local NearestOne = 99999
-	
-	for i,v in pairs(game:GetService("Workspace")["__THINGS"].Coins:GetChildren()) do 
-		if (v.POS.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < NearestOne then
-			nearest = v
-			NearestOne = (v.POS.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+while _G.StartFarming do task.wait(1) --# Start farming if enabled
+	local NearestCoin = 4000 or 5000
+
+	function GetCoins()
+		local Returntable = {}
+		local ListCoins = Invoke("Get Coins", {})
+		for i,v in pairs(ListCoins) do
+			if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.p).Magnitude < NearestCoin then
+				local Coin = v
+				Coin["index"] = i
+				table.insert(Returntable, Coin)
+				NearestCoin = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.p).Magnitude
+			end
+		end
+
+		return Returntable
+	end
+
+
+	local lp = game:GetService("Players").LocalPlayer
+	if _G.FarmSettings.AutoOrbs == true then
+		ClaimOrbs()
+	end
+	if _G.FarmSettings.AutoLootBags == true then
+		for _,Bag in pairs(game:GetService("Workspace")["__THINGS"].Lootbags:GetChildren()) do
+			Bag.CFrame = CFrame.new(lp.Character.HumanoidRootPart.Position)
 		end
 	end
-	
-	local cointhingy = nearest.Name
+
+
+	local cointhingy = GetCoins()
 	local getpet = GetEquippedPets()
-	for i = 1, #cointhingy do
-		FarmCoin(cointhingy, getpet[i%#getpet+1])
+
+
+	if _G.FarmSettings.MultiTarget then
+		for i = 1, #cointhingy do
+			FarmCoin(cointhingy[i].index, getpet[i%#getpet+1])
+		end
 	end
 end
-
