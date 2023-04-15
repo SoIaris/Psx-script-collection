@@ -6,7 +6,7 @@
 local lib = require(game.ReplicatedStorage:WaitForChild("Framework"):WaitForChild("Library"));
 local savedPets = lib.Save.Get().Pets
 
-local SignN = "Cylix#2977" -- Change Cylix#2977 to the person you want it to be signed by
+local SignN = "Cylix#2977" -- Change Cylix#2977 to anything (Example: SignN = "Preston Likes Money")
 
 for i,v in pairs(savedPets) do
 if v.nk == "SignMe" then
