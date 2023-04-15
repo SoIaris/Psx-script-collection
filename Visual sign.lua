@@ -1,6 +1,7 @@
 --[[
     By: Cylix#2977
     About: Visual sign, sign all your pets named "SignMe"
+    Tutorial: Rename your pet you want sign to ("SignMe")
 ]]
 
 local lib = require(game.ReplicatedStorage:WaitForChild("Framework"):WaitForChild("Library"));
